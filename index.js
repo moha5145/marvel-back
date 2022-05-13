@@ -22,7 +22,7 @@ app.use(characterCharacterById);
 app.get("*", (req, res) => {
   res.status(400).json({ error: "Page not find" });
 });
-const port = 4000;
+// const port = 4000;
 app.listen(port, () => {
-  console.log(`serveur listening port: ${port} ...`);
+  console.log(`serveur listening port: ${process.env.PORT} ...`);
 });
