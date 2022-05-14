@@ -1,6 +1,9 @@
 const express = require("express");
 const formidable = require("express-formidable");
 const cors = require("cors");
+const mongoose = require("mongoose");
+
+mongoose.connect("mongodb://localhost:27017/marvel");
 
 const app = express();
 
@@ -17,8 +20,15 @@ app.use(comicsCharacterById);
 const characters = require("./routes/characters");
 app.use(characters);
 
-const characterCharacterById = require("./routes/characterCharacterById");
-app.use(characterCharacterById);
+const character = require("./routes/character");
+app.use(character);
+
+const signUp = require("./routes/signUp");
+app.use(signUp);
+
+const login = require("./routes/login");
+app.use(login);
+
 app.get("*", (req, res) => {
   res.status(400).json({ error: "Page not find" });
 });
