@@ -44,6 +44,9 @@ app.use(getAllComicFavoris);
 const getAllCharacterFavoris = require("./routes/getALLCharacterFavori");
 app.use(getAllCharacterFavoris);
 
+const deleteCharacterFavori = require("./routes/deleteCharacterFavori ");
+app.use(deleteCharacterFavori);
+
 app.get("*", (req, res) => {
   res.status(400).json({ error: "Page not find" });
 });
