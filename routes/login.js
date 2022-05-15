@@ -7,7 +7,7 @@ const uid2 = require("uid2");
 
 const User = require("../models/User");
 
-router.get("/login", async (req, res) => {
+router.post("/login", async (req, res) => {
   try {
     const { email, password } = req.fields;
     const token = req.headers.authorization;
@@ -23,7 +23,7 @@ router.get("/login", async (req, res) => {
 
       //   console.log(hash, user.hash);
       if (hash === user.hash) {
-        console.log(hash);
+        // console.log(hash);
         res.json({ token: token, username: user.username, email: email });
       } else {
         res.status(400).json({ error: "le mot de passe ou l'email n'est pas correct" });

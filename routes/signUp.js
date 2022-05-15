@@ -7,8 +7,9 @@ const uid2 = require("uid2");
 
 const User = require("../models/User");
 
-router.get("/signup", async (req, res) => {
+router.post("/signup", async (req, res) => {
   try {
+    console.log(req.fields);
     const { username, email, password } = req.fields;
 
     if (!username) {
@@ -33,7 +34,7 @@ router.get("/signup", async (req, res) => {
         await newUser.save();
 
         const result = await User.findById(newUser._id).select("username email token");
-        console.log(result);
+        // console.log(result);
         res.json(result);
       }
     }

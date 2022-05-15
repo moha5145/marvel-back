@@ -6,12 +6,10 @@ const mongoose = require("mongoose");
 
 // mongoose.connect("mongodb://localhost:27017/marvel");
 mongoose.connect(process.env.MONGOOSE_CONNECT);
-
 const app = express();
 
 app.use(cors());
 app.use(formidable());
-const apiKey = process.env.API_KEY;
 
 const comics = require("./routes/comics");
 app.use(comics);
@@ -30,6 +28,21 @@ app.use(signUp);
 
 const login = require("./routes/login");
 app.use(login);
+
+const favorisCharactair = require("./routes/favorisCaractair");
+app.use(favorisCharactair);
+
+const favorisComics = require("./routes/favorisComics");
+app.use(favorisComics);
+
+const deleteComicsFavori = require("./routes/deleteComicsFavori");
+app.use(deleteComicsFavori);
+
+const getAllComicFavoris = require("./routes/getAllComicFavoris");
+app.use(getAllComicFavoris);
+
+const getAllCharacterFavoris = require("./routes/getALLCharacterFavori");
+app.use(getAllCharacterFavoris);
 
 app.get("*", (req, res) => {
   res.status(400).json({ error: "Page not find" });
