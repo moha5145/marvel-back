@@ -43,4 +43,30 @@ router.post("/signup", async (req, res) => {
   }
 });
 
+router.post("/login", async (req, res) => {
+  try {
+    const { email, password } = req.fields;
+    const token = req.headers.authorization;
+
+    const user = await User.findOne({ email: email });
+
+    if (!user) {
+      res.status(400).json({ error: "Compte introuvable" });
+    } else {
+      const salt = user.salt;
+      const hash = SHA256(password + salt).toString(encBase64);
+
+      //   console.log(hash, user.hash);
+      if (hash === user.hash) {
+        // console.log(hash);
+        res.json({ token: user.token, username: user.username, email: email });
+      } else {
+        res.status(400).json({ error: "Email ou mot de passe incorrect" });
+      }
+    }
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+});
+
 module.exports = router;

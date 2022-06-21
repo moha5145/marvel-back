@@ -14,38 +14,11 @@ app.use(formidable());
 const comics = require("./routes/comics");
 app.use(comics);
 
-const comicsCharacterById = require("./routes/comicsCharacterById");
-app.use(comicsCharacterById);
-
 const characters = require("./routes/characters");
 app.use(characters);
 
-const character = require("./routes/character");
-app.use(character);
-
-const signUp = require("./routes/signUp");
-app.use(signUp);
-
-const login = require("./routes/login");
-app.use(login);
-
-const favorisCharactair = require("./routes/favorisCaractair");
-app.use(favorisCharactair);
-
-const favorisComics = require("./routes/favorisComics");
-app.use(favorisComics);
-
-const deleteComicsFavori = require("./routes/deleteComicsFavori");
-app.use(deleteComicsFavori);
-
-const getAllComicFavoris = require("./routes/getAllComicFavoris");
-app.use(getAllComicFavoris);
-
-const getAllCharacterFavoris = require("./routes/getALLCharacterFavori");
-app.use(getAllCharacterFavoris);
-
-const deleteCharacterFavori = require("./routes/deleteCharacterFavori ");
-app.use(deleteCharacterFavori);
+const users = require("./routes/users");
+app.use(users);
 
 app.get("*", (req, res) => {
   res.status(400).json({ error: "Page not find" });
