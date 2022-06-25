@@ -1,15 +1,14 @@
 const mongoose = require("mongoose");
 
-const CharacterFavoris = mongoose.model("CharacterFavoris", {
-  name: String,
+const ComicFavoris = mongoose.model("ComicFavoris", {
+  title: String,
   description: String,
   thumbnail: Object,
-  comics: Array,
   user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
   },
-  characterId: String,
+  comicId: String,
 });
 
-module.exports = CharacterFavoris;
+module.exports = ComicFavoris;

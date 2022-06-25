@@ -5,7 +5,8 @@ const axios = require("axios");
 
 const apiKey = process.env.API_KEY;
 
-const Favoris = require("../models/Favoris");
+const ComicFavoris = require("../models/ComicsFavoris");
+const User = require("../models/User");
 
 router.get("/comics", async (req, res) => {
   try {
@@ -30,23 +31,34 @@ router.get("/comics/:characterId", async (req, res) => {
   }
 });
 
-router.post("/comics/favoris/post", async (req, res) => {
+router.post("/comics/favoris/create", async (req, res) => {
   try {
-    // console.log(req.fields);
-    const favoris = await new Favoris(req.fields);
+    console.log(req.fields);
+    const { title, description, thumbnail, userId, comicId } = req.fields;
+    // const userId = req.fields.userId;
 
+    const user = await User.findById(userId);
+    console.log(userId);
+    const favoris = await new ComicFavoris({
+      title,
+      description,
+      thumbnail,
+      comicId,
+      user: user._id,
+    });
     await favoris.save();
+    console.log(favoris);
 
-    res.json(req.fields);
+    res.json(favoris);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
 });
 
-router.get("/comics/favoris/get", async (req, res) => {
+router.get("/comics/favoris/:userId", async (req, res) => {
   try {
-    const favori = await Favoris.find();
-    // console.log(favori);
+    const userId = req.params.userId;
+    const favori = await ComicFavoris.find({ user: userId });
     res.json(favori);
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -55,9 +67,9 @@ router.get("/comics/favoris/get", async (req, res) => {
 
 router.post("/comics/favoris/delete", async (req, res) => {
   try {
-    const { _id } = req.fields;
-    const favori = await Favoris.findByIdAndDelete(_id);
-    // console.log(favori);
+    const { _id, userId } = req.fields;
+    const favori = await ComicFavoris.deleteOne({ comicId: _id, user: userId });
+    console.log(_id, userId);
     res.json(req.fields);
   } catch (error) {
     res.status(400).json({ error: error.message });

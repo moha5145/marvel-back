@@ -6,6 +6,7 @@ const axios = require("axios");
 const apiKey = process.env.API_KEY;
 
 const CharacterFavoris = require("../models/CharacterFavoris ");
+const User = require("../models/User");
 
 router.get("/characters", async (req, res) => {
   try {
@@ -27,29 +28,33 @@ router.get("/character/:characterId", async (req, res) => {
   }
 });
 
-router.post("/caractair/favoris/post", async (req, res) => {
+router.post("/caractair/favoris/create", async (req, res) => {
   try {
     // console.log(req.fields);
-    const { name, description, thumbnail, _id, comics } = req.fields;
+    const { name, description, thumbnail, userId, comics, characterId } = req.fields;
+
+    const user = await User.findById(userId);
 
     const favori = await new CharacterFavoris({
       name: name,
       description: description,
       thumbnail: thumbnail,
       comics: comics,
-      _id: _id,
+      user: user._id,
+      characterId: characterId,
     });
-    console.log(favori);
     await favori.save();
+    console.log(favori);
     res.json(req.fields);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
 });
 
-router.get("/character/favoris/get", async (req, res) => {
+router.get("/character/favoris/:userId", async (req, res) => {
   try {
-    const favori = await CharacterFavoris.find();
+    const userId = req.params.userId;
+    const favori = await CharacterFavoris.find({ user: userId });
     res.json(favori);
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -58,9 +63,9 @@ router.get("/character/favoris/get", async (req, res) => {
 
 router.post("/character/favoris/delete", async (req, res) => {
   try {
-    const { _id } = req.fields;
-    console.log(_id);
-    const favori = await CharacterFavoris.findByIdAndDelete(_id);
+    const { _id, userId } = req.fields;
+    console.log(req.fields);
+    const favori = await CharacterFavoris.deleteOne({ userId: userId, characterId: _id });
     // console.log(favori);
     res.json(req.fields);
   } catch (error) {

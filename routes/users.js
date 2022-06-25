@@ -9,7 +9,7 @@ const User = require("../models/User");
 
 router.post("/signup", async (req, res) => {
   try {
-    console.log(req.fields);
+    // console.log(req.fields);
     const { username, email, password } = req.fields;
 
     if (!username) {
@@ -49,7 +49,7 @@ router.post("/login", async (req, res) => {
     const token = req.headers.authorization;
 
     const user = await User.findOne({ email: email });
-
+    console.log(user._id);
     if (!user) {
       res.status(400).json({ error: "Compte introuvable" });
     } else {
@@ -59,7 +59,7 @@ router.post("/login", async (req, res) => {
       //   console.log(hash, user.hash);
       if (hash === user.hash) {
         // console.log(hash);
-        res.json({ token: user.token, username: user.username, email: email });
+        res.json({ token: user.token, username: user.username, email: email, id: user._id });
       } else {
         res.status(400).json({ error: "Email ou mot de passe incorrect" });
       }
