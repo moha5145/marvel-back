@@ -11,9 +11,7 @@ const User = require("../models/User");
 router.get("/comics", async (req, res) => {
   try {
     const { title, skip } = req.query;
-    // console.log(req.query);
     const response = await axios.get(`https://lereacteur-marvel-api.herokuapp.com/comics?apiKey=${apiKey}&title=${title}&skip=${skip}`);
-    // console.log(response.data);
     res.json(response.data);
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -24,7 +22,6 @@ router.get("/comics/:characterId", async (req, res) => {
   console.log(req.params.characterId);
   try {
     const response = await axios.get(`https://lereacteur-marvel-api.herokuapp.com/comics/${req.params.characterId}?apiKey=${apiKey}`);
-    // console.log(response.data);
     res.json(response.data);
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -35,7 +32,6 @@ router.post("/comics/favoris/create", async (req, res) => {
   try {
     console.log(req.fields);
     const { title, description, thumbnail, userId, comicId } = req.fields;
-    // const userId = req.fields.userId;
 
     const user = await User.findById(userId);
     console.log(userId);
@@ -57,8 +53,17 @@ router.post("/comics/favoris/create", async (req, res) => {
 
 router.get("/comics/favoris/:userId", async (req, res) => {
   try {
+    let filter = {};
     const userId = req.params.userId;
-    const favori = await ComicFavoris.find({ user: userId });
+    if (req.query.title) {
+      filter.title = new RegExp(req.query.title, "i");
+    }
+    if (userId) {
+      filter.user = userId;
+    }
+    const favori = await ComicFavoris.find(filter);
+
+    console.log(favori);
     res.json(favori);
   } catch (error) {
     res.status(400).json({ error: error.message });
